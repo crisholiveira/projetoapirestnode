@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
@@ -26,8 +27,8 @@ app.get('/', (req, res)=> {
 })
 
 
-const DB_USER = 'root'
-const DB_PASSWORD = encodeURIComponent('pBBj23TDsmHqdKSK')
+const DB_USER = process.env.DB_USER
+const DB_PASSWORD = encodeURIComponent(process.env.DB_PASSWORD)
 
 
 //conectar com o banco
