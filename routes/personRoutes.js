@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const req = require('express/lib/request')
 const Person = require('../models/Person')
 
 
@@ -51,6 +52,43 @@ router.get('/:id', async (req, res)=> {
         res.status(500).json({error: error})
         
     }
+})
+
+router.patch('/:id', async(req, res)=> {
+    const id = req.params.id 
+    const {name, salary, approved} = req.body
+    const person = {
+        name,
+        salary,
+        approved
+    }
+    try {
+        const updatePerson = await Person.updateOne({_id:id}, person)
+        if(updatePerson.matchedCount === 0){
+            res.status(422).json({message: "O usuário não foi encontrado"})
+            return
+        }
+        res.status(200).json(person)        
+    } catch (error) {
+        res.status(500).json({error: error})
+    }
+})
+
+router.delete('/:id', async(req, res) => {
+    const id = req.params.id 
+    const person = await Person.findOne({_id:id})
+    if(!person){
+        res.status(422).json({message: "O usuario não foi encontrado"})
+    }
+    try {
+        await Person.deleteOne({_id:id})
+        res.status(200).json({message: "Usuario removido com sucesso"})
+        
+    } catch (error) {
+        res.status(500).json({error: error})
+    }
+
+
 })
 
 module.exports = router
