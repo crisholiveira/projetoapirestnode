@@ -2,6 +2,8 @@ const express = require('express')
 const mongoose = require('mongoose')
 const app = express()
 
+const Person = require('./models/Person')
+
 
 //para ler json
 app.use(
@@ -10,6 +12,10 @@ app.use(
     })
 )
 app.use(express.json())
+
+//rotas da api
+const personRoutes = require('./routes/personRoutes')
+app.use('/person', personRoutes)
 
 // rota inicial/endpoint
 app.get('/', (req, res)=> {
